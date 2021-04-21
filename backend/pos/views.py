@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework.generics import UpdateAPIView, ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from .filters import OrderAdminFilter, OrderWaiterFilter, OrderCookerFilter
-from .serializers import CategorySerializer, OrderCookerSerializer, OrderWaiterSerializer, ProductSerializer, \
+from .filters import OrderAdminFilter, OrderWaiterFilter, OrderCookFilter
+from .serializers import CategorySerializer, OrderCookSerializer, ProductSerializer, \
     TableSerializer, OrderSingleSerializer, OrderItemSingleSerializer, OrderNestedSerializer
 from .models.category import Category
 from .models.order import Order
@@ -11,7 +11,7 @@ from .models.table import Table
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
 from rest_framework.response import Response
-from .permissions import IsAdmin, IsWaiter, IsCooker
+from .permissions import IsAdmin, IsWaiter, IsCook
 
 
 @extend_schema(description='Admin only')
@@ -104,7 +104,7 @@ class OrderNestedAdminListCreateView(ListCreateAPIView):
 @extend_schema(description='Admin and Waiter')
 class OrderNestedWaiterListCreateView(ListCreateAPIView):
     queryset = Order.objects.all()
-    serializer_class = OrderWaiterSerializer
+    serializer_class = OrderNestedSerializer
     filterset_class = OrderWaiterFilter
     permission_classes = [IsAuthenticated & (IsAdmin | IsWaiter)]
 
@@ -112,13 +112,13 @@ class OrderNestedWaiterListCreateView(ListCreateAPIView):
 @extend_schema(description='Admin and Cook')
 class OrderItemCookerListView(ListAPIView):
     queryset = OrderItem.objects.all().order_by('is_ready')
-    serializer_class = OrderCookerSerializer
-    filterset_class = OrderCookerFilter
-    permission_classes = [IsAuthenticated & (IsAdmin | IsCooker)]
+    serializer_class = OrderCookSerializer
+    filterset_class = OrderCookFilter
+    permission_classes = [IsAuthenticated & (IsAdmin | IsCook)]
 
 
 @extend_schema(description='Admin and Cook')
 class OrderItemCookerUpdateView(UpdateAPIView):
     queryset = OrderItem.objects.all()
-    serializer_class = OrderCookerSerializer
-    permission_classes = [IsAuthenticated & (IsAdmin | IsCooker)]
+    serializer_class = OrderCookSerializer
+    permission_classes = [IsAuthenticated & (IsAdmin | IsCook)]

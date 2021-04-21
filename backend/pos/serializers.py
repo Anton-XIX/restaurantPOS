@@ -28,7 +28,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
-        fields = ('product', 'start_date', 'start_time', 'is_ready')
+        fields = ('product', 'start_date', 'start_time', 'is_ready', 'count', 'order_item_cost')
         read_only_fields = ['order_item_cost']
 
 
@@ -38,7 +38,7 @@ class OrderNestedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('id', 'table', 'start_date', 'start_time', 'is_active', 'order_item', 'discount_choice')
+        fields = ('id', 'table', 'start_date', 'start_time', 'is_active', 'order_item', 'discount_choice', 'order_cost')
         read_only_fields = ['id', 'order_cost']
 
     def create(self, validated_data):
@@ -64,6 +64,7 @@ class OrderNestedSerializer(serializers.ModelSerializer):
             order_item.product = item.get('product', order_item.product)
             order_item.start_time = item.get('start_time', order_item.start_time)
             order_item.is_ready = item.get('is_ready', order_item.is_ready)
+            order_item.count = item.get('count', order_item.count)
             order_item.save()
         return instance
 
@@ -72,6 +73,7 @@ class OrderSingleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = '__all__'
+        read_only_fields = ['order_cost']
 
 
 class OrderItemSingleSerializer(serializers.ModelSerializer):
@@ -81,20 +83,10 @@ class OrderItemSingleSerializer(serializers.ModelSerializer):
         read_only_fields = ['is_ready', 'order_item_cost']
 
 
-class OrderCookerSerializer(serializers.ModelSerializer):
+class OrderCookSerializer(serializers.ModelSerializer):
     product = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = OrderItem
-        fields = ('id', 'order', 'product', 'count', 'start_time', 'is_ready',)
-        read_only_fields = ('id', 'order', 'product', 'count', 'start_time')
-
-
-class OrderWaiterSerializer(serializers.ModelSerializer):
-    order_item = OrderItemSerializer(many=True)
-    discount_choice = serializers.ChoiceField(choices=[0, 10, 15, 20, 25])
-
-    class Meta:
-        model = Order
-        fields = '__all__'
-        read_only_fields = ['order_item.is_ready', 'order_item.order_item_cost', 'order_cost']
+        fields = ['id', 'order', 'product', 'count', 'start_time', 'is_ready', ]
+        read_only_fields = ['id', 'order', 'product', 'count', 'start_time']

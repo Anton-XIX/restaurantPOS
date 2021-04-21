@@ -12,4 +12,5 @@ urlpatterns = [
     path('auth/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user/', include('users.urls')),
     path('main/api/v1/', include('pos.urls')),
+    path('', include('media_uploader.urls')),
 ]

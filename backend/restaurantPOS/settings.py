@@ -1,13 +1,14 @@
 from datetime import timedelta
 from pathlib import Path
-
+import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-1)-d&2682)8-s(2a=vu736u%zbz$dk*mee+&o(tl0au8&5o(j@'
 
 DEBUG = True
-import os
-ALLOWED_HOSTS = ['0.0.0.0']
+
+
+ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'users.CustomUser'
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -21,6 +22,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'users',
     'django_filters',
+    'storages',
+    'media_uploader'
 ]
 
 REST_FRAMEWORK = {
@@ -29,10 +32,12 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ]
+
 }
 
 MIDDLEWARE = [
@@ -77,7 +82,6 @@ DATABASES = {
 }
 
 
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -103,13 +107,33 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
 }
 
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATIC_URL = "/staticfiles/"
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# STATIC_URL = "/staticfiles/"
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+
+AWS_LOCATION = 'static'
+AWS_DEFAULT_ACL = None
+
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+
+AWS_QUERYSTRING_AUTH = False

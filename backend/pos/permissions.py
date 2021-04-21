@@ -15,7 +15,7 @@ class IsWaiter(permissions.BasePermission):
             return True
 
 
-class IsCooker(permissions.BasePermission):
+class IsCook(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if request.user.role == 3 and request.user.is_active:

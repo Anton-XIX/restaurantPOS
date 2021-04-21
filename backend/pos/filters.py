@@ -14,6 +14,6 @@ class OrderWaiterFilter(FilterSet):
     table_id = NumberFilter(field_name='table')
 
 
-class OrderCookerFilter(FilterSet):
+class OrderCookFilter(FilterSet):
     order_id = NumberFilter(field_name='order')
     table_id = NumberFilter(field_name='order__table')

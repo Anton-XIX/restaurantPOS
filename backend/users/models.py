@@ -64,7 +64,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField('Name', max_length=100)
     last_name = models.CharField('Surname', max_length=100)
     email = models.EmailField('Email', max_length=200, unique=True)
-    phone_number = models.CharField('Phone number', max_length=100, validators=[phone_regex], null=True, blank=True)
+    phone_number = models.CharField('Phone number', max_length=100, validators=[phone_regex],
+                                    null=True, blank=True,unique=True)
     role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True)
     is_waiter = models.BooleanField('Waiter', default=False, blank=True)
     is_cooker = models.BooleanField('Cooker', default=False, blank=True)

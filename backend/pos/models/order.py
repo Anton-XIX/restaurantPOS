@@ -3,6 +3,10 @@ from django.db import models
 from .table import Table
 
 
+def get_current_time():
+    return localtime().time().strftime('%H:%M:%S')
+
+
 class Order(models.Model):
     DISCOUNT_0 = 0
     DISCOUNT_10 = 10
@@ -21,7 +25,7 @@ class Order(models.Model):
         Table,
         on_delete=models.CASCADE)
     start_date = models.DateField(default=localdate, blank=True)
-    start_time = models.TimeField(default=localtime, blank=True)
+    start_time = models.TimeField(default=get_current_time, blank=True)
     is_active = models.BooleanField(default=True)
     discount_choice = models.PositiveIntegerField('Discount', choices=DISCOUNT, default=0, blank=True)
     order_cost = models.DecimalField(max_digits=7, decimal_places=2, default=0)
