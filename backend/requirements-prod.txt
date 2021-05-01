@@ -4,7 +4,7 @@ filelock==3.0.12
 six==1.15.0
 virtualenv==20.4.2
 Django==3.1.7
-djangorestframework==3.12.2
+djangorestframework==3.11
 drf-spectacular==0.13.2
 Pillow==8.1.2
 psycopg2-binary==2.8.6
@@ -17,5 +17,5 @@ s3transfer==0.3.7
 boto3==1.17.53
 botocore==1.20.53
 django-storages==1.11.1
-
+djoser==2.1.0
 

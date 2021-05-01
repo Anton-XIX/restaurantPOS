@@ -2,7 +2,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.generics import UpdateAPIView, ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .filters import OrderAdminFilter, OrderWaiterFilter, OrderCookFilter
 from .serializers import CategorySerializer, OrderCookSerializer, ProductSerializer, \
-    TableSerializer, OrderSingleSerializer, OrderItemSingleSerializer, OrderNestedSerializer
+    TableSerializer, OrderNestedSerializer
 from .models.category import Category
 from .models.order import Order
 from .models.order_item import OrderItem
@@ -56,32 +56,7 @@ class ProductSingleView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated & IsAdmin]
 
 
-@extend_schema(description='Admin and Waiter')
-class OrderListCreateView(ListCreateAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderSingleSerializer
-    permission_classes = [IsAuthenticated & (IsAdmin | IsWaiter)]
 
-
-@extend_schema(description='Admin and Waiter')
-class OrderSingleView(RetrieveUpdateDestroyAPIView):
-    queryset = Order.objects.all()
-    serializer_class = OrderSingleSerializer
-    permission_classes = [IsAuthenticated & (IsAdmin | IsWaiter)]
-
-
-@extend_schema(description='Admin and Waiter')
-class OrderItemListCreateView(ListCreateAPIView):
-    queryset = OrderItem.objects.all()
-    serializer_class = OrderItemSingleSerializer
-    permission_classes = [IsAuthenticated & (IsAdmin | IsWaiter)]
-
-
-@extend_schema(description='Admin only')
-class OrderItemSingleView(RetrieveUpdateDestroyAPIView):
-    queryset = OrderItem.objects.all()
-    serializer_class = OrderItemSingleSerializer
-    permission_classes = [IsAuthenticated & IsAdmin]
 
 
 @extend_schema(description='Admin and Waiter')

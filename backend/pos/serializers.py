@@ -69,19 +69,6 @@ class OrderNestedSerializer(serializers.ModelSerializer):
         return instance
 
 
-class OrderSingleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = '__all__'
-        read_only_fields = ['order_cost']
-
-
-class OrderItemSingleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderItem
-        fields = '__all__'
-        read_only_fields = ['is_ready', 'order_item_cost']
-
 
 class OrderCookSerializer(serializers.ModelSerializer):
     product = serializers.StringRelatedField(read_only=True)

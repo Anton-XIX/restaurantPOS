@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'pos.apps.PosConfig',
     'drf_spectacular',
     'rest_framework',
+    'djoser',
     'users',
     'django_filters',
     'storages',
@@ -39,7 +40,28 @@ REST_FRAMEWORK = {
     ]
 
 }
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST= 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "lexa228551@gmail.com")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD ", "zfiukvrirdxmvzae")
+EMAIL_USE_TLS = True
+DJOSER = {
+    #'LOGIN_FIELD': 'email',
+    #'USER_CREATE_PASSWORD_RETYPE' :True,
+    'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
+    'SEND_CONFIRMATION_EMAIL': True,
+    'SET_USERNAME_RETYPE':True,
+    #'SET_PASSWORD_RETYPE':True,
+    'PASSWORD_RESET_CONFIRM_URL':'auth/users/reset_password_confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL':'email/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'ooo/act/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SERIALIZERS':{'user_create':'users.serializers.CustomUserSerializer'}
 
+
+    }
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
